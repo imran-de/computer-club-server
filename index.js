@@ -49,7 +49,7 @@ async function run() {
             res.json(user);
         })
 
-        //get single product api
+        //get single notice api
         app.get('/notice/:id', async (req, res) => {
             const id = req?.params?.id;
             const query = { _id: ObjectId(id) };
@@ -60,6 +60,7 @@ async function run() {
         // add/ post notice
         app.post('/add-notice', async (req, res) => {
             const data = req.body;
+            console.log(data);
             const result = await noticeCollection.insertOne(data);
             res.json(result);
         })
