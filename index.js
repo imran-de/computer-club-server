@@ -60,8 +60,12 @@ async function run() {
         // add/ post notice
         app.post('/add-notice', async (req, res) => {
             const data = req.body;
-            console.log(data);
             const result = await noticeCollection.insertOne(data);
+            res.json(result);
+        })
+        //get all notice
+        app.get('/all-notice', async (req, res) => {
+            const result = await noticeCollection.find({}).sort({ _id: -1 }).toArray();
             res.json(result);
         })
 
