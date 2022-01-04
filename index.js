@@ -23,6 +23,11 @@ async function run() {
         const noticeCollection = database.collection('notice');
         const usersCollection = database.collection('users');
 
+        // all users
+        app.get('/users', async (req, res) => {
+            const users = await usersCollection.find({}).toArray();
+            res.json(users);
+        })
         //post user data
         app.post('/user', async (req, res) => {
             const data = req.body;
