@@ -45,6 +45,23 @@ async function run() {
             res.json(result);
 
         })
+        //make admin api
+        app.post('/users/make-admin', async (req, res) => {
+            const email = req?.body?.email;
+
+            const filter = { email: email };
+            const updateDoc = { $set: { role: 'admin' } };
+            const user = await usersCollection.findOne(filter);
+
+            if (user?.role === 'admin') {
+                res.json({ message: "The user already have admin access, no need to make admin again", from: 'alreadyAdmin' });
+            } else if (user === null) {
+                res.json({ message: "The user not found! check email and try again", from: 'noEmail' });
+            } else {
+                const result = await usersCollection.updateOne(filter, updateDoc);
+                res.json(result);
+            }
+        });
 
         //get user
         app.get('/users/:email', async (req, res) => {
