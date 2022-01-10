@@ -22,7 +22,13 @@ async function run() {
         const database = client.db("computer-club");
         const noticeCollection = database.collection('notice');
         const usersCollection = database.collection('users');
-
+        const teachersCollection = database.collection('teachers');
+        const studentsCollection = database.collection('students');
+        const executivesCollection = database.collection('executive');
+        const resultCollection = database.collection('result');
+        /************************
+         * all about users API
+         *************************/
         // all users
         app.get('/users', async (req, res) => {
             const users = await usersCollection.find({}).toArray();
@@ -45,6 +51,60 @@ async function run() {
             res.json(result);
 
         })
+        /**************************
+        //all about department API
+        ***************************/
+        //get all teachers
+        app.get('/teachers', async (red, res) => {
+            const teachers = await teachersCollection.find({}).toArray();
+            res.json(teachers);
+        })
+        //add teacher
+        app.post('/add-teacher', async (req, res) => {
+            const teacher = req.body;
+            const result = await teachersCollection.insertOne(teacher);
+            res.json(result);
+        })
+        //get all student
+        app.get('/students', async (red, res) => {
+            const students = await studentsCollection.find({}).toArray();
+            res.json(students);
+        })
+        //add teacher
+        app.post('/add-student', async (req, res) => {
+            const student = req.body;
+            const result = await studentsCollection.insertOne(student);
+            res.json(result);
+        })
+        /*******************
+         * All about executive API
+         ******************/
+        //get all executive
+        app.get('/executives', async (req, res) => {
+            const executives = await executivesCollection.find({}).sort({ _id: -1 }).toArray();
+            res.json(executives);
+        })
+        //add executive
+        app.post('/add-executive', async (req, res) => {
+            const executive = req.body;
+            const result = await executivesCollection.insertOne(executive);
+            res.json(result);
+        })
+        /****************
+         * all about results
+         *****************/
+        // all result
+        app.get('/results', async (req, res) => {
+            const results = await resultCollection.find({}).sort({ _id: -1 }).toArray();
+            res.json(results);
+        })
+        //add result
+        app.post('/add-result', async (req, res) => {
+            const result = req.body;
+            const insert = await resultCollection.insertOne(result);
+            res.json(insert);
+        })
+
         //make admin api
         app.post('/users/make-admin', async (req, res) => {
             const email = req?.body?.email;
