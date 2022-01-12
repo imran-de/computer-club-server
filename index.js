@@ -26,6 +26,7 @@ async function run() {
         const studentsCollection = database.collection('students');
         const executivesCollection = database.collection('executive');
         const resultCollection = database.collection('result');
+        const eventsCollection = database.collection('events');
         /************************
          * all about users API
          *************************/
@@ -65,15 +66,33 @@ async function run() {
             const result = await teachersCollection.insertOne(teacher);
             res.json(result);
         })
+        // delete teacher
+        app.delete('/teachers/:id', async (req, res) => {
+            //catch deleted id
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            // req to database to do operation
+            const result = await teachersCollection.deleteOne(query);
+            res.json(result);
+        })
         //get all student
         app.get('/students', async (red, res) => {
             const students = await studentsCollection.find({}).toArray();
             res.json(students);
         })
-        //add teacher
+        //add student
         app.post('/add-student', async (req, res) => {
             const student = req.body;
             const result = await studentsCollection.insertOne(student);
+            res.json(result);
+        })
+        // delete student
+        app.delete('/students/:id', async (req, res) => {
+            //catch deleted id
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            // req to database to do operation
+            const result = await studentsCollection.deleteOne(query);
             res.json(result);
         })
         /*******************
@@ -90,6 +109,15 @@ async function run() {
             const result = await executivesCollection.insertOne(executive);
             res.json(result);
         })
+        // delete executives
+        app.delete('/executives/:id', async (req, res) => {
+            //catch deleted id
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            // req to database to do operation
+            const result = await executivesCollection.deleteOne(query);
+            res.json(result);
+        })
         /****************
          * all about results
          *****************/
@@ -103,6 +131,30 @@ async function run() {
             const result = req.body;
             const insert = await resultCollection.insertOne(result);
             res.json(insert);
+        })
+
+        /***************
+         * all about events api
+         ************/
+        app.get('/events', async (req, res) => {
+            const results = await eventsCollection.find({}).sort({ _id: -1 }).toArray();
+            res.json(results);
+        })
+        //add events
+        app.post('/add-event', async (req, res) => {
+            // must confirm that from input added event type, otherwise you can't filter data
+            const result = req.body;
+            const insert = await eventsCollection.insertOne(result);
+            res.json(insert);
+        })
+        // delete event
+        app.delete('/event/:id', async (req, res) => {
+            //catch deleted event id
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            // req to database to do operation
+            const result = await eventsCollection.deleteOne(query);
+            res.json(result);
         })
 
         //make admin api
@@ -148,6 +200,15 @@ async function run() {
         //get all notice
         app.get('/all-notice', async (req, res) => {
             const result = await noticeCollection.find({}).sort({ _id: -1 }).toArray();
+            res.json(result);
+        })
+        // delete notice
+        app.delete('/notices/:id', async (req, res) => {
+            //catch deleted id
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            // req to database to do operation
+            const result = await noticeCollection.deleteOne(query);
             res.json(result);
         })
 
